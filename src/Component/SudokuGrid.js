@@ -1,75 +1,61 @@
 export default function SudokuGrid() {
   const grid = [
-    [3, 0, 6, 5, 0, 8, 4, 0, 0],
-    [5, 2, 0, 0, 0, 0, 0, 0, 0],
-    [0, 8, 7, 0, 0, 0, 0, 3, 1],
-    [0, 0, 3, 0, 1, 0, 0, 8, 0],
-    [9, 0, 0, 8, 6, 3, 0, 0, 5],
-    [0, 5, 0, 0, 9, 0, 6, 0, 0],
-    [1, 3, 0, 0, 0, 0, 2, 5, 0],
-    [0, 0, 0, 0, 0, 0, 0, 7, 4],
-    [0, 0, 5, 2, 0, 6, 3, 0, 0],
+    [3, null, 6, 5, null, 8, 4, null, null],
+    [5, 2, null, null, null, null, null, null, null],
+    [null, 8, 7, null, null, null, null, 3, 1],
+    [null, null, 3, null, 1, null, null, 8, null],
+    [9, null, null, 8, 6, 3, null, null, 5],
+    [null, 5, null, null, 9, null, 6, null, null],
+    [1, 3, null, null, null, null, 2, 5, null],
+    [null, null, null, null, null, null, null, 7, 4],
+    [null, null, 5, 2, null, 6, 3, null, null],
   ];
+
+  const handleInputChange = (event, rowIndex, colIndex) => {
+    const inputValue = parseInt(event.target.value);
+    grid[rowIndex][colIndex] = inputValue || 0;
+  };
+
+  const gridElements = [];
+  for (let i = 1; i < 10; i++) {
+    const rowElements = grid[i - 1].map((rowElement, colIndex) => {
+      const disableInput = rowElement > 0;
+      return (
+        <td key={colIndex}>
+          <input
+            type="number"
+            value={rowElement}
+            onChange={(event) => handleInputChange(event, i - 1, colIndex)}
+            style={{
+              width: "30px",
+              backgroundColor: rowElement ? "#33333" : "white",
+            }}
+            disabled={disableInput}
+          />
+        </td>
+      );
+    });
+
+    gridElements.push(
+      <tr key={i}>
+        <th>R{i}</th>
+        {rowElements}
+      </tr>
+    );
+  }
 
   return (
     <div>
       <table className="table">
         <thead>
           <tr>
-            <th>C1</th>
-            <th>C2</th>
-            <th>C3</th>
-            <th>C4</th>
-            <th>C5</th>
-            <th>C6</th>
-            <th>C7</th>
-            <th>C8</th>
-            <th>C9</th>
+            <th>C0</th>
+            {grid.map((index) => (
+              <th>C{index + 1}</th>
+            ))}
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <th> R1</th>
-            <td>1</td>
-          </tr>
-          <tr>
-            <th> R2</th>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th> R3</th>
-            <td>3</td>
-          </tr>
-          <tr>
-            <th> R4</th>
-            <td>4</td>
-          </tr>
-          <tr>
-            <th> R5</th>
-            <td>5</td>
-          </tr>
-          <tr>
-            <th> R6</th>
-            <td>6</td>
-          </tr>
-          <tr>
-            <th> R7</th>
-            <td>7</td>
-          </tr>
-          <tr>
-            <th> R8</th>
-            <td>8</td>
-          </tr>
-          <tr>
-            <th> R9</th>
-            <td>9</td>
-          </tr>
-        </tbody>
-        {/* <tfoot>
-          <tr>
-            <td colspan="9">Total: $25</td>
-          </tr>
-        </tfoot> */}
+        <tbody>{gridElements}</tbody>
       </table>
     </div>
   );

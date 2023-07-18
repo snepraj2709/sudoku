@@ -3,7 +3,7 @@ import { HiLightBulb } from "react-icons/hi";
 export default function Header() {
   return (
     <div>
-      <h1>Play Sudoku</h1>
+      <h1 className="font-bold underline">Play Sudoku</h1>
       <HiLightBulb />
       <h2>Quick Start</h2>
       <>
