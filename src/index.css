@@ -1,13 +1,40 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  margin: 10;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+/* App css */
+.App {
+  width: 50%;
+  align-items: center;
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* CSS to give border to the table */
+.table {
+  border-collapse: collapse;
+}
+
+.table th {
+  border: 1px solid black;
+  padding: 8px;
+  font-weight: bold;
+}
+
+.table td {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+.table tr {
+  border: 1px solid #ddd;
 }
