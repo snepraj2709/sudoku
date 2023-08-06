@@ -4,6 +4,7 @@ export default function SudokuGrid({ grid }) {
     grid[rowIndex][colIndex] =
       isNaN(inputValue) || inputValue < 1 || inputValue > 9 ? null : inputValue;
   };
+  //console.log("r0,c0", grid[0]);
 
   return (
     <div className=" flex flex-col items-center py-5">
@@ -11,10 +12,6 @@ export default function SudokuGrid({ grid }) {
         return (
           <div className="flex " key={rowIndex}>
             {row.map((cell, colIndex) => {
-              const squareRowIndex = Math.floor(rowIndex / 3);
-              const squareColIndex = Math.floor(colIndex / 3);
-              const squareNumber = squareRowIndex * 3 + squareColIndex + 1;
-
               const cellClassName = cell === null ? "bg-gray-300" : "";
 
               const topBorder = rowIndex % 3 === 0 ? "border-t" : "";

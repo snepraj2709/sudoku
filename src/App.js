@@ -1,25 +1,23 @@
 import Header from "./Component/Header";
 import SudokuGrid from "./Component/SudokuGrid";
+import { solveSudoku } from "./Utils/SolveSudoku";
+import { grid1, grid2, grid3 } from "./Utils/allGrids";
 
 function App() {
-  const grid = [
-    [3, null, 6, 5, null, 8, 4, null, null],
-    [5, 2, null, null, null, null, null, null, null],
-    [null, 8, 7, null, null, null, null, 3, 1],
-    [null, null, 3, null, 1, null, null, 8, null],
-    [9, null, null, 8, 6, 3, null, null, 5],
-    [null, 5, null, null, 9, null, 6, null, null],
-    [1, 3, null, null, null, null, 2, 5, null],
-    [null, null, null, null, null, null, null, 7, 4],
-    [null, null, 5, 2, null, 6, 3, null, null],
-  ];
+  solveSudoku(grid1);
+  console.log("solutionGrid", grid1);
+
   return (
     <div className="w-2/3 bg-slate-100 text-center m-10 space-x-2">
       <h1 className="font-bold underline p-5">Play Sudoku</h1>
       <Header />
-      <SudokuGrid grid={grid} />
+      <SudokuGrid grid={grid1} />
+      <div>
+        <button onClick={() => solveSudoku(grid1)}>Solution</button>
+      </div>
     </div>
   );
 }
 
 export default App;
+//get a constantly updated array of numbers which are not there in that row, col,box
