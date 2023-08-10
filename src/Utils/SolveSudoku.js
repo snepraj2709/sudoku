@@ -18,16 +18,16 @@ export function solveSudoku(grid) {
           if (isValid(grid, row, col, num)) {
             grid[row][col] = num;
             if (solveSudoku(grid)) {
-              return true;
+              return grid;
             } else {
               grid[row][col] = 0;
             }
           }
         }
-        return false;
+        return null;
       }
     }
   }
   console.log("grid solved", grid);
-  return true;
+  return grid;
 }
