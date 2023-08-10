@@ -1,23 +1,28 @@
+import { useState } from "react";
 import Header from "./Component/Header";
 import SudokuGrid from "./Component/SudokuGrid";
-import { solveSudoku } from "./Utils/SolveSudoku";
-import { grid1, grid2, grid3 } from "./Utils/allGrids";
+import { grid1, grid4 } from "./Utils/allGrids";
+import ToasterWrapper from "./Component/ToastWrapper";
+import GameControls from "./Component/GameControls";
+import SelectNumber from "./Component/SelectNumber";
+import Timer from "./Component/Timer";
 
 function App() {
-  solveSudoku(grid1);
-  console.log("solutionGrid", grid1);
+  const [sudoku, setSudoku] = useState(grid4);
 
   return (
-    <div className="w-2/3 bg-slate-100 text-center m-10 space-x-2">
-      <h1 className="font-bold underline p-5">Play Sudoku</h1>
-      <Header />
-      <SudokuGrid grid={grid1} />
+    <div className="w-2/3 bg-slate-100 text-center m-10 space-x-2 mx-auto">
+      <ToasterWrapper />
       <div>
-        <button onClick={() => solveSudoku(grid1)}>Solution</button>
+        <h1 className="font-bold underline p-5 ">Play Sudoku</h1>
+        <Header />
+        <Timer />
+        <SudokuGrid grid={sudoku} />
+        <SelectNumber />
+        <GameControls />
       </div>
     </div>
   );
 }
 
 export default App;
-//get a constantly updated array of numbers which are not there in that row, col,box
