@@ -19,7 +19,9 @@ function SelectNumber() {
         <div
           key={index}
           number={number}
-          className="font-base bg-blue-300 rounded-md p-3 m-1"
+          className={`font-base  rounded-md p-3 m-1 ${
+            currentNumber === number ? "bg-blue-500" : "bg-blue-300"
+          }`}
           onClick={(e) => selectNumber(e)}>
           {number}
         </div>

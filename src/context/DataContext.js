@@ -9,7 +9,7 @@ export const DataProvider = ({ children }) => {
     allGrids: [grid1, grid2],
     currentNumber: null,
     currentGrid: grid1,
-    selectedCell: null,
+    selectedCell: { row: null, column: null },
   };
 
   function dataReducer(state, { type, payload }) {
@@ -22,6 +22,11 @@ export const DataProvider = ({ children }) => {
         return {
           ...state,
           currentGrid: payload,
+        };
+      case "SelectCurrentCell":
+        return {
+          ...state,
+          selectedCell: payload,
         };
       default:
         return state;
