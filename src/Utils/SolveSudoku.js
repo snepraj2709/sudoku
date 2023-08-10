@@ -28,6 +28,5 @@ export function solveSudoku(grid) {
       }
     }
   }
-  console.log("grid solved", grid);
   return grid;
 }

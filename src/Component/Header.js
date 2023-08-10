@@ -1,16 +1,14 @@
-import { HiLightBulb } from "react-icons/hi";
-import { instructions } from "../data/instructions";
+import Timer from "./Timer";
 
 export default function Header() {
-  const { quickNote } = instructions;
   return (
-    <div className="p-5 border-2 border-slate-500 bg-yellow-100 w-1/2 mx-auto">
-      <div className="flex flex-row justify-center m-2">
-        <HiLightBulb className="w-5 h-5" />
-        <p className="underline decoration-solid">Quick Start</p>
+    <div>
+      <div className="flex justify-between mx-auto">
+        <h1 className="font-bold text-xl p-5 ">Play Sudoku</h1>
+        <Timer />
       </div>
-      <hr />
-      <>{quickNote}</>
+
+      <hr className="border-slate-900" />
     </div>
   );
 }

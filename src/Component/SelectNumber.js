@@ -11,7 +11,7 @@ function SelectNumber() {
       type: "SelectNumber",
       payload: Number(e.target.getAttribute("number")),
     });
-    toast.success(`Selected ${currentNumber}`);
+    toast.success(`${Number(e.target.getAttribute("number"))} Selected`);
   }
   return (
     <div className="flex justify-center px-5">

@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { useData } from "../context/DataContext";
 
 function Timer() {
-  const [currentTime, setCurrentTime] = useState(0);
+  const { state, dispatch } = useData();
+  const currentTime = state.currentTime;
   const [pageLoadTime, setPageLoadTime] = useState(Date.now());
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (isActive) {
-        setCurrentTime(Date.now() - pageLoadTime);
+        dispatch({
+          type: "SetCurrentTime",
+          payload: Date.now() - pageLoadTime,
+        });
       }
     }, 1000);
-
     return () => {
       clearInterval(interval);
     };
   }, [isActive, pageLoadTime]);
+  //console.log(state.solved);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
       setIsActive(!document.hidden);
       if (!document.hidden) {
         setPageLoadTime(Date.now() - currentTime);
+      } else if (!state?.solved) {
+        setPageLoadTime(Date.now() - Date.now());
       }
     };
 
@@ -38,7 +45,7 @@ function Timer() {
   }, [currentTime]);
 
   return (
-    <span className="p-2 bg-orange-200 w-44 justify-evenly flex rounded-lg mt-4 my-auto mx-auto">
+    <span className="p-2 bg-orange-200 w-44 justify-evenly flex rounded-lg mt-4 my-auto ">
       <p className="font-medium text-lg ">Time Spent:</p>
       <p className="text-lg font-light">{formattedTime}</p>
     </span>
