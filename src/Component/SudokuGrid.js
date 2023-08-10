@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useData } from "../context/DataContext";
 import { solveSudoku } from "../Utils/SolveSudoku";
+import { toast } from "react-hot-toast";
 
 export default function SudokuGrid({ grid, onCellChange }) {
   const { state, dispatch } = useData();
   const [currentGrid, setCurrentGrid] = useState(grid);
-  const { currentNumber, selectedCell } = state;
-  const initialGrid = grid;
-  let topBorder,
+  const { currentNumber, selectedCell, errorMode, initialGrid } = state;
+  //const initialGrid = grid;
+
+  let solvedSudoku,
+    topBorder,
     leftBorder,
     rightBorder,
     bottomBorder,
@@ -15,16 +18,26 @@ export default function SudokuGrid({ grid, onCellChange }) {
     currentCellClass,
     highlightCellClass;
 
-  // const solvedSudoku = solveSudoku(grid);
-  // console.log("Solved", solvedSudoku);
+  solvedSudoku = solveSudoku([...initialGrid]);
+  //console.log("Solved sudoku", solvedSudoku);
 
   const handleInputChange = (rowIndex, colIndex) => {
+    //const correctValue = solvedSudoku[rowIndex][colIndex];
+    const updatedGrid = currentGrid.map((row, rIndex) =>
+      row.map((cell, cIndex) =>
+        rowIndex === rIndex && colIndex === cIndex ? currentNumber : cell
+      )
+    );
+    // console.log("cell value in error mode", correctValue);
+    // if (errorMode && currentNumber) {
+    //   if (currentNumber === correctValue) {
+    //     setCurrentGrid(updatedGrid);
+    //     dispatch({ type: "UpdateGrid", payload: updatedGrid });
+    //   } else {
+    //     toast(`💡${currentNumber} is not the right number, Try another one`);
+    //   }
+    // } else
     if (currentNumber) {
-      const updatedGrid = currentGrid.map((row, rIndex) =>
-        row.map((cell, cIndex) =>
-          rowIndex === rIndex && colIndex === cIndex ? currentNumber : cell
-        )
-      );
       setCurrentGrid(updatedGrid);
       dispatch({ type: "UpdateGrid", payload: updatedGrid });
     }
@@ -38,23 +51,30 @@ export default function SudokuGrid({ grid, onCellChange }) {
     });
   };
 
-  useEffect(() => {
-    setCurrentGrid(grid);
-    const { row, col } = selectedCell;
-    if (row || col) {
-      const updatedGrid = currentGrid.map((row, rIndex) =>
-        row.map((cell, cIndex) =>
-          row === rIndex && col === cIndex ? currentNumber : cell
-        )
-      );
-      setCurrentGrid(updatedGrid);
-      dispatch({ type: "UpdateGrid", payload: updatedGrid });
-    }
-  }, [grid, selectedCell]);
+  useEffect(
+    () => {
+      setCurrentGrid(grid);
+      const { row, col } = selectedCell;
+      if (row || col) {
+        const updatedGrid = currentGrid.map((row, rIndex) =>
+          row.map((cell, cIndex) =>
+            row === rIndex && col === cIndex ? currentNumber : cell
+          )
+        );
+        setCurrentGrid(updatedGrid);
+        dispatch({ type: "UpdateGrid", payload: updatedGrid });
+      }
+      if (currentGrid === solvedSudoku) {
+        dispatch({ type: "GameWon", payload: true });
+      }
+    },
+    [selectedCell],
+    grid
+  );
 
   return (
     <div className="flex flex-col items-center py-5">
-      {currentGrid.map((row, rowIndex) => (
+      {currentGrid?.map((row, rowIndex) => (
         <div className="flex" key={rowIndex}>
           {row.map((cell, colIndex) => {
             topBorder = rowIndex % 3 === 0 ? "border-t" : "";

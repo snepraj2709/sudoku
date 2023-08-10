@@ -1,15 +1,20 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { createContext, useReducer } from "react";
-import { grid1, grid2 } from "../Utils/allGrids";
+import { grid1, grid2, grid3, grid4 } from "../Utils/allGrids";
 
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const data = {
-    allGrids: [grid1, grid2],
+    allGrids: [grid1, grid2, grid3, grid4],
     currentNumber: null,
+    initialGrid: grid1,
     currentGrid: grid1,
     selectedCell: { row: null, column: null },
+    errorMode: false,
+    solved: false,
+    currentTime: 0,
   };
 
   function dataReducer(state, { type, payload }) {
@@ -17,8 +22,10 @@ export const DataProvider = ({ children }) => {
       case "SelectNumber":
         return { ...state, currentNumber: payload };
       case "Restart":
+        toast.success("Restarted the game");
         return { ...state, currentGrid: payload };
       case "UpdateGrid":
+        console.log("UpdateGrid", payload);
         return {
           ...state,
           currentGrid: payload,
@@ -28,12 +35,48 @@ export const DataProvider = ({ children }) => {
           ...state,
           selectedCell: payload,
         };
+      case "ToggleErrorMode":
+        payload
+          ? toast.success(`Deactivated Error Mode`)
+          : toast.success(`Activated Error Mode`);
+
+        return {
+          ...state,
+          errorMode: !payload,
+        };
+      case "SetCurrentTime":
+        //console.log(payload);
+
+        return {
+          ...state,
+          currentTime: payload,
+        };
+      case "GameWon":
+        toast.success(`You won!`);
+        return {
+          ...state,
+          solved: payload,
+        };
+      case "NewGame":
+        toast.success(`New game started`);
+        return {
+          ...data,
+          currentGrid: payload,
+          initialGrid: payload,
+        };
       default:
         return state;
     }
   }
 
   const [state, dispatch] = useReducer(dataReducer, data);
+  useEffect(
+    () =>
+      state.currentGrid === state.initialGrid
+        ? dispatch({ type: "GameWon", payload: true })
+        : null,
+    []
+  );
 
   return (
     <DataContext.Provider value={{ state, dispatch }}>
