@@ -9,7 +9,7 @@ export const DataProvider = ({ children }) => {
   const data = {
     allGrids: [grid1, grid2, grid3, grid4],
     currentNumber: null,
-    initialGrid: grid1,
+    initialGrid: [...grid1],
     currentGrid: grid1,
     selectedCell: { row: null, column: null },
     errorMode: false,
@@ -25,7 +25,7 @@ export const DataProvider = ({ children }) => {
         toast.success("Restarted the game");
         return { ...state, currentGrid: payload };
       case "UpdateGrid":
-        console.log("UpdateGrid", payload);
+        //console.log("UpdateGrid", payload);
         return {
           ...state,
           currentGrid: payload,
@@ -45,8 +45,6 @@ export const DataProvider = ({ children }) => {
           errorMode: !payload,
         };
       case "SetCurrentTime":
-        //console.log(payload);
-
         return {
           ...state,
           currentTime: payload,
@@ -70,13 +68,11 @@ export const DataProvider = ({ children }) => {
   }
 
   const [state, dispatch] = useReducer(dataReducer, data);
-  useEffect(
-    () =>
-      state.currentGrid === state.initialGrid
-        ? dispatch({ type: "GameWon", payload: true })
-        : null,
-    []
-  );
+  useEffect(() => {
+    if (state.currentGrid === state.initialGrid) {
+      dispatch({ type: "GameWon", payload: true });
+    }
+  }, []);
 
   return (
     <DataContext.Provider value={{ state, dispatch }}>

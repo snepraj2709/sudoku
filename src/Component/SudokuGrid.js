@@ -7,7 +7,6 @@ export default function SudokuGrid({ grid, onCellChange }) {
   const { state, dispatch } = useData();
   const [currentGrid, setCurrentGrid] = useState(grid);
   const { currentNumber, selectedCell, errorMode, initialGrid } = state;
-  //const initialGrid = grid;
 
   let solvedSudoku,
     topBorder,
@@ -19,25 +18,26 @@ export default function SudokuGrid({ grid, onCellChange }) {
     highlightCellClass;
 
   solvedSudoku = solveSudoku([...initialGrid]);
-  //console.log("Solved sudoku", solvedSudoku);
 
   const handleInputChange = (rowIndex, colIndex) => {
-    //const correctValue = solvedSudoku[rowIndex][colIndex];
+    const correctValue = solvedSudoku[rowIndex][colIndex];
     const updatedGrid = currentGrid.map((row, rIndex) =>
       row.map((cell, cIndex) =>
         rowIndex === rIndex && colIndex === cIndex ? currentNumber : cell
       )
     );
-    // console.log("cell value in error mode", correctValue);
-    // if (errorMode && currentNumber) {
-    //   if (currentNumber === correctValue) {
-    //     setCurrentGrid(updatedGrid);
-    //     dispatch({ type: "UpdateGrid", payload: updatedGrid });
-    //   } else {
-    //     toast(`💡${currentNumber} is not the right number, Try another one`);
-    //   }
-    // } else
-    if (currentNumber) {
+    console.log("Correct value in cell", correctValue);
+    if (errorMode && currentNumber) {
+      if (currentNumber === correctValue) {
+        setCurrentGrid(updatedGrid);
+        dispatch({ type: "UpdateGrid", payload: updatedGrid });
+        toast(`🎊Yay! ${currentNumber} is the right one`);
+      } else {
+        toast(
+          `💡Ooops! ${currentNumber} is not the right one,Try another number`
+        );
+      }
+    } else if (currentNumber) {
       setCurrentGrid(updatedGrid);
       dispatch({ type: "UpdateGrid", payload: updatedGrid });
     }
@@ -51,26 +51,22 @@ export default function SudokuGrid({ grid, onCellChange }) {
     });
   };
 
-  useEffect(
-    () => {
-      setCurrentGrid(grid);
-      const { row, col } = selectedCell;
-      if (row || col) {
-        const updatedGrid = currentGrid.map((row, rIndex) =>
-          row.map((cell, cIndex) =>
-            row === rIndex && col === cIndex ? currentNumber : cell
-          )
-        );
-        setCurrentGrid(updatedGrid);
-        dispatch({ type: "UpdateGrid", payload: updatedGrid });
-      }
-      if (currentGrid === solvedSudoku) {
-        dispatch({ type: "GameWon", payload: true });
-      }
-    },
-    [selectedCell],
-    grid
-  );
+  useEffect(() => {
+    setCurrentGrid(grid);
+    const { row, col } = selectedCell;
+    if (row || col) {
+      const updatedGrid = currentGrid.map((row, rIndex) =>
+        row.map((cell, cIndex) =>
+          row === rIndex && col === cIndex ? currentNumber : cell
+        )
+      );
+      setCurrentGrid(updatedGrid);
+      dispatch({ type: "UpdateGrid", payload: updatedGrid });
+    }
+    if (currentGrid === solvedSudoku) {
+      dispatch({ type: "GameWon", payload: true });
+    }
+  }, [selectedCell]);
 
   return (
     <div className="flex flex-col items-center py-5">
